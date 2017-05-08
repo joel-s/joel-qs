@@ -5,10 +5,10 @@
 
 ## Router URLs:
 
-- /: List of questions
-- /create: Create a question
-- /edit/7: Edit question 7
-- /view/7: View question 7
+- **/**: List of questions
+- **/create**: Create a question
+- **/edit/7**: Edit question 7
+- **/view/7**: View question 7
 
 
 ## Top-level Components
