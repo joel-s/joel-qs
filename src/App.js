@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, { Component } from 'react';
-import { Grid, Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import ListQuestions from './views/ListQuestions';
@@ -12,31 +12,34 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Navbar inverse fixedTop>
-            <Grid>
-              <Navbar.Header>
-                <Navbar.Brand>
-                  <Link to="/">Questions</Link>
-                </Navbar.Brand>
-                <Nav>
-                  <LinkContainer to="/create">
-                    <NavItem eventKey={1}>Create a Question</NavItem>
-                  </LinkContainer>
-                </Nav>
-                <Navbar.Toggle />
-              </Navbar.Header>
-            </Grid>
+          <Navbar inverse collapseOnSelect>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <Link to="/">Questions</Link>
+              </Navbar.Brand>
+              <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <Nav>
+                <LinkContainer to="/create">
+                  <NavItem eventKey={1}>Create a question</NavItem>
+                </LinkContainer>
+                {/*
+                <NavItem eventKey={2} href="#">Link</NavItem>
+                <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+                  <MenuItem eventKey={3.1}>Action</MenuItem>
+                  <MenuItem eventKey={3.2}>Another action</MenuItem>
+                  <MenuItem eventKey={3.3}>Something else here</MenuItem>
+                  <MenuItem divider />
+                  <MenuItem eventKey={3.3}>Separated link</MenuItem>
+                </NavDropdown>
+                */}
+              </Nav>
+            </Navbar.Collapse>
           </Navbar>
-
-          <div class="container">
-              <div id="banner" class="page-header">
-                &nbsp;
-              </div>
-
-            // Main "routing table"
+          <div className="container">
             <Route path="/" exact={true} component={ListQuestions}/>
             <Route path="/create" exact={true} component={CreateQuestion}/>
-
           </div>
         </div>
       </Router>

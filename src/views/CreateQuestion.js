@@ -5,28 +5,34 @@ class CreateQuestion extends Component {
     return (
       <div className="CreateQuestion jumbotron">
         <div className="row">
-        <div className="col-md-offset-2 col-md-8">
-          <form className="form-horizontal">
-            <h1>Create a question</h1>
-            <div className="form-group">
-                <label htmlFor="inputEmail" className="control-label col-xs-2">Email</label>
-                <div className="col-xs-10">
-                    <input type="email" className="form-control" id="inputEmail" placeholder="Email" />
+          <div className="col-sm-offset-2 col-sm-8">
+            <h2 className="text-center">Create a question<br />&nbsp;</h2>
+              <form className="form-horizontal">
+                <div className="form-group">
+                  <label htmlFor="inputQuestion" className="control-label col-sm-3">Question</label>
+                  <div className="col-sm-8">
+                    <input type="text" className="form-control" id="inputQuestion" name="question" placeholder="What's 2+2?" />
+                  </div>
                 </div>
-            </div>
-            <div className="form-group">
-                <label htmlFor="inputPassword" className="control-label col-xs-2">Password</label>
-                <div className="col-xs-10">
-                    <input type="password" className="form-control" id="inputPassword" placeholder="Password" />
+                <div className="form-group">
+                  <label htmlFor="inputAnswer" className="control-label col-sm-3">Answer</label>
+                  <div className="col-sm-8">
+                    <input type="text" className="form-control" id="inputAnswer" name="answer" placeholder="4" />
+                  </div>
                 </div>
-            </div>
-            <div className="form-group">
-                <div className="col-xs-offset-2 col-xs-10">
+                <div className="form-group">
+                  <label htmlFor="inputAnswer" className="control-label col-sm-3">Incorrect Answers</label>
+                  <div className="col-sm-8">
+                    <input type="text" className="form-control" id="inputAnswer" name="answer" placeholder="5, 7" />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="col-sm-offset-3 col-sm-8">
                     <button type="submit" className="btn btn-primary">Save</button>
-                </div>
-            </div>
-          </form>
-        </div>
+                  </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     );
