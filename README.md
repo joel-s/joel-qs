@@ -24,7 +24,6 @@
 - **ViewQuestion**: View an existing question
 
 
-
 ## Local and Remote data
 
 To keep things simple, the React app _assumes_ that it is the only client communicating with the back end. If other clients use the back end simultaneously, the app will be blissfully unaware of the changes made by those clients.
@@ -39,6 +38,6 @@ Possible ways to keep state:
   - addQuestion()
   - updateQuestion()
 
-How could state get communicated to components. (Keep it simple.)
+How could state get communicated to components? (Keep it simple.)
 
 ListQuestions calls AllQuestions.getQuestions() each time it is instantiated--it clones the list of questions so that it can sort it in any desired order (using setState()). AllQuestions.getQuestions() returns an empty list if it has to give up on communicating with the server. CreateQuestion calls addQuestion(), which returns either success or failure (depending on ability to contact the server). In case of failure, AllQuestions does not modify its internal list of questions. Likewise, EditQuestion calls updateQuestion(), which works the same in the case of failure.

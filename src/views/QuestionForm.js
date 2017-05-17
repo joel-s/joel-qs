@@ -22,7 +22,8 @@ class QuestionForm extends Component {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     this.props.saveFunc(this.state);
   }
 

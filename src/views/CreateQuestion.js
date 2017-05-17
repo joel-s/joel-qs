@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import QuestionForm from './QuestionForm';
+import '../AllQuestions';   // for window.allQuestions
 
 function saveNew(state) {
   const {question, answer, distractors} = state;
   alert(`q=${question}, a=${answer}, d=${distractors}`);
+  window.allQuestions.addQuestion({question, answer, distractors});
 }
 
 class CreateQuestion extends Component {
