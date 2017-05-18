@@ -1,6 +1,6 @@
 # React-based "Questions" UI
 
-*Provides a front end to "joel-qs-rest".*
+*Provides a front end to "joel-qs-api" (REST API).*
 
 
 ## Router URLs:
