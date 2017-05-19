@@ -41,3 +41,10 @@ Possible ways to keep state:
 How could state get communicated to components? (Keep it simple.)
 
 ListQuestions calls AllQuestions.getQuestions() each time it is instantiated--it clones the list of questions so that it can sort it in any desired order (using setState()). AllQuestions.getQuestions() returns an empty list if it has to give up on communicating with the server. CreateQuestion calls addQuestion(), which returns either success or failure (depending on ability to contact the server). In case of failure, AllQuestions does not modify its internal list of questions. Likewise, EditQuestion calls updateQuestion(), which works the same in the case of failure.
+
+
+## API Callbacks and Error Handling
+
+If AllQuestions.addQuestion() succeeds, the user should be redirected to the index (question list). If it fails, however, the user should see a dialog box with the error details. Similar handling should apply to other functions that attempt to contact the REST API.
+
+It would be nice to prevent the user from submitting multiple API calls by (for example) double-clicking a "Save" button. This doesn't need to be implemented in the MVP, though.

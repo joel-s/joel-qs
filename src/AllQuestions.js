@@ -1,6 +1,6 @@
 import restful, { fetchBackend } from 'restful.js';
 
-const productionRestUrl = "https://joel_qs_api.herokuapp.com/apiv1";
+const productionRestUrl = "https://joel-qs-api.herokuapp.com/questions/";
 const localhostRestUrl = "http://localhost:8000/questions/";
 
 
@@ -38,19 +38,26 @@ class AllQuestions {
 
   /**
    * Add a question remotely and locally to the end of the list.
-   * Return the ID of the new question.
+   * Return a promise for the response.
    */
   addQuestion(q) {
     this._assertValidQuestion(q, false);
-    this._ajaxAddQuestion(q);
-    const newID = this.questions.length;
-    q.id = newID;
-    this.questions.push(q);
-    return newID;
+    let promise = this._ajaxAddQuestion(q);
+    promise.then((response) => {
+      const status = response.statusCode();
+      if (status >= 200 && status < 300) {
+        const newID = response.body().id();
+        q.id = newID;
+        this.questions.push(q);
+      } else {
+        throw Error(`Unexpected POST response: ${status}`);
+      }
+    });
+    return promise;
   }
 
   _ajaxAddQuestion(q) {
-    this.api.post(q);
+    return this.api.post(q);
   }
 
   _assertValidQuestion(q, expectID) {

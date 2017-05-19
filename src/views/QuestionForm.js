@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 
 class QuestionForm extends Component {
   constructor(props) {
@@ -7,7 +8,8 @@ class QuestionForm extends Component {
     this.state = {
       question: '',
       answer: '',
-      distractors: ''
+      distractors: '',
+      done: false,
     };
 
     this.bHandleChange = this.handleChange.bind(this);
@@ -24,10 +26,15 @@ class QuestionForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.saveFunc(this.state);
+    let promise = this.props.saveFunc(this.state);
+    promise.then((response) => this.setState({ done: true }))
+      .catch((error) => alert(error));
   }
 
   render() {
+    if (this.state.done) {
+      return <Redirect push={true} to="/" />;
+    }
     // This could be done using React Bootstrap elements but "if it ain't broke"
     return (
       <form className="form-horizontal" onSubmit={this.bHandleSubmit}>
@@ -60,7 +67,10 @@ class QuestionForm extends Component {
         </div>
         <div className="form-group">
           <div className="col-sm-offset-3 col-sm-8">
-            <button type="submit" className="btn btn-primary">Save</button>
+            <button type="submit" className="btn btn-primary"
+              disabled={this.state.question === '' ||
+                this.state.answer === '' ||
+                this.state.distractors === ''}>Save</button>
           </div>
         </div>
       </form>
