@@ -1,16 +1,12 @@
 import restful, { fetchBackend } from 'restful.js';
 
-const productionRestUrl = "https://joel-qs-api.herokuapp.com/questions/";
-const localhostRestUrl = "http://localhost:8000/questions/";
-
 
 class AllQuestions {
 
   constructor() {
-    this.api = restful(localhostRestUrl, fetchBackend(fetch));
-    this.restUrl = localhostRestUrl;
+    this.api = restful("http://localhost:8000", fetchBackend(fetch));
     this.questions = null;
-    this._createFakeQuestions(5);
+    // this._createFakeQuestions(5);
   }
 
   _createFakeQuestions(num) {
@@ -27,13 +23,32 @@ class AllQuestions {
   }
 
   /**
-   * Get the list of questions from the REST API or return the cached list.
+   * Get a promise (for a response) from the API or return the cached array.
+   * If the response has a numeric 'length' argument, it's an array.
    */
   getQuestions() {
-    if (this.questions === null) {
-      throw new Error("REST API call not implemented");
+    if (this.questions !== null) {
+      return this.questions;
     }
-    return this.questions;
+    const promise = this._ajaxGetQuestions();
+    promise.then((response) => {
+      const status = response.statusCode();
+      if (status >= 200 && status < 300) {
+        const qEntities = response.body();
+        this.questions = [];
+        for (let qEntity of qEntities) {
+          const { id, question, answer, distractors } = qEntity.data();
+          this.questions.push({ id, question, answer, distractors });
+        }
+      } else {
+        throw Error(`Unexpected GET response: ${status}`);
+      }
+    });
+    return promise;
+  }
+
+  _ajaxGetQuestions() {
+    return this.api.all("questions/").getAll();
   }
 
   /**
@@ -42,7 +57,7 @@ class AllQuestions {
    */
   addQuestion(q) {
     this._assertValidQuestion(q, false);
-    let promise = this._ajaxAddQuestion(q);
+    const promise = this._ajaxAddQuestion(q);
     promise.then((response) => {
       const status = response.statusCode();
       if (status >= 200 && status < 300) {
@@ -57,7 +72,7 @@ class AllQuestions {
   }
 
   _ajaxAddQuestion(q) {
-    return this.api.post(q);
+    return this.api.all("questions/").post(q);  // HACK
   }
 
   _assertValidQuestion(q, expectID) {
