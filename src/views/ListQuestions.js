@@ -6,16 +6,14 @@ class ListQuestions extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      questions: null,
-    }
 
     let qs = window.allQuestions.getQuestions();
     if (typeof qs.length === "number") {
       let questions = qs.map(({ id, question, answer, distractors }) =>
         ({ id, question, answer, distractors }));
-      this.setState({ questions });
+      this.state = { questions };
     } else {
+      this.state = { questions: null };
       qs.then(response => {
         const qEntities = response.body();
         let questions = [];
@@ -34,9 +32,9 @@ class ListQuestions extends Component {
         <h1>Questions</h1>
         <ul>{
           (this.state.questions === null) ?
-            <li>Loading questions...</li> :
+            <li key={-1}>Loading questions...</li> :
             this.state.questions.map(({ id, question, answer, distractors }) =>
-              <li>{id} | {question} | {answer} | {distractors}</li>)
+              <li key={id}>{id} | {question} | {answer} | {distractors}</li>)
         }</ul>
       </div>
     );
