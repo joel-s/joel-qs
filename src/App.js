@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import ListQuestions from './views/ListQuestions';
 import CreateQuestion from './views/CreateQuestion';
+import EditQuestion from './views/EditQuestion';
 import './App.css';
 
 class App extends Component {
@@ -39,7 +40,8 @@ class App extends Component {
           </Navbar>
           <div className="container">
             <Route path="/" exact={true} component={ListQuestions}/>
-            <Route path="/create" exact={true} component={CreateQuestion}/>
+            <Route path="/create" component={CreateQuestion}/>
+            <Route path="/edit/:_id" component={EditQuestion}/>
           </div>
         </div>
       </Router>

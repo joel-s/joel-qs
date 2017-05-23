@@ -52,6 +52,22 @@ class AllQuestions {
   }
 
   /**
+   * Return the question object with the given id, or undefined if not found.
+   * Search only the cached `questions` array; no API calls.
+   */
+   getQuestion(id) {
+     if (this.questions === null) {
+       return undefined;
+     }
+     for (let i = 0; i < this.questions.length; i++) {
+       if (this.questions[i].id === id) {
+         return this.questions[i];
+       }
+     }
+     return undefined;
+   }
+
+  /**
    * Add a question remotely and locally to the end of the list.
    * Return a promise for the response.
    */
@@ -73,6 +89,33 @@ class AllQuestions {
 
   _ajaxAddQuestion(q) {
     return this.api.all("questions/").post(q);  // HACK: restful.js should add /
+  }
+
+  /**
+   * Update a question remotely and locally to the end of the list.
+   * Return a promise for the response.
+   */
+  updateQuestion(q) {
+    this._assertValidQuestion(q, true);
+    const promise = this._ajaxUpdateQuestion(q);
+    promise.then((response) => {
+      const status = response.statusCode();
+      if (status >= 200 && status < 300) {
+        this._updateQuestionArrayEntry(q);
+      } else {
+        throw Error(`Unexpected POST response: ${status}`);
+      }
+    });
+    return promise;
+  }
+
+  _ajaxUpdateQuestion(q) {
+    return this.api.one("questions", q.id).push(q);
+  }
+
+  _updateQuestionArrayEntry(question) {
+    this.questions = this.questions.map(q =>
+      q.id === question.id ? question : q);
   }
 
   _assertValidQuestion(q, expectID) {

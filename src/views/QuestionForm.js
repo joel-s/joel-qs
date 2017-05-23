@@ -6,9 +6,9 @@ class QuestionForm extends Component {
     super(props);
 
     this.state = {
-      question: '',
-      answer: '',
-      distractors: '',
+      question: props.question || '',
+      answer: props.answer || '',
+      distractors: props.distractors || '',
       done: false,
     };
 
@@ -44,7 +44,7 @@ class QuestionForm extends Component {
           <div className="col-sm-8">
             <input type="text" className="form-control" id="inputQuestion"
               name="question" placeholder="What's 2+2?" required
-              value={this.props.question} onChange={this.bHandleChange}/>
+              defaultValue={this.props.question} onChange={this.bHandleChange}/>
           </div>
         </div>
         <div className="form-group">
@@ -53,7 +53,7 @@ class QuestionForm extends Component {
           <div className="col-sm-8">
             <input type="text" className="form-control" id="inputAnswer"
               name="answer" placeholder="4" required
-              value={this.props.answer} onChange={this.bHandleChange}/>
+              defaultValue={this.props.answer} onChange={this.bHandleChange}/>
           </div>
         </div>
         <div className="form-group">
@@ -62,7 +62,8 @@ class QuestionForm extends Component {
           <div className="col-sm-8">
             <input type="text" className="form-control" id="inputDistractors"
               name="distractors" placeholder="5, 7" required
-              value={this.props.distractors} onChange={this.bHandleChange}/>
+              defaultValue={this.props.distractors}
+              onChange={this.bHandleChange}/>
           </div>
         </div>
         <div className="form-group">
