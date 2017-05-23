@@ -48,7 +48,7 @@ class AllQuestions {
   }
 
   _ajaxGetQuestions() {
-    return this.api.all("questions/").getAll();
+    return this.api.all("questions").getAll();
   }
 
   /**
@@ -72,7 +72,7 @@ class AllQuestions {
   }
 
   _ajaxAddQuestion(q) {
-    return this.api.all("questions/").post(q);  // HACK
+    return this.api.all("questions/").post(q);  // HACK: restful.js should add /
   }
 
   _assertValidQuestion(q, expectID) {
