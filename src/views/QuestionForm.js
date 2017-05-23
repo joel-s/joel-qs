@@ -33,7 +33,7 @@ class QuestionForm extends Component {
 
   render() {
     if (this.state.done) {
-      return <Redirect push={true} to="/" />;
+      return <Redirect to="/" push />;
     }
     // This could be done using React Bootstrap elements but "if it ain't broke"
     return (

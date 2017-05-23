@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Navbar, Table } from 'react-bootstrap';
+import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 import { FormGroup, FormControl, Button, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 import '../AllQuestions';   // for window.allQuestions
 
 
 class ListQuestions extends Component {
-
   constructor(props) {
     super(props);
 
@@ -32,17 +33,8 @@ class ListQuestions extends Component {
     return (
       <div className="ListQuestions">
         <LQControls />
-        <LQTable />
+        <LQTable questions={this.state.questions}/>
         <LQLinks />
-
-        {/* Temporary... */}
-        <h2>Questions</h2>
-        <ul>{
-          (this.state.questions === null) ?
-            <li key={-1}>Loading questions...</li> :
-            this.state.questions.map(({ id, question, answer, distractors }) =>
-              <li key={id}>{id} | {question} | {answer} | {distractors}</li>)
-        }</ul>
       </div>
     );
   }
@@ -64,9 +56,12 @@ class LQControls extends Component {
              <FormGroup>
                Results per page:
                {' '}
-               <FormControl componentClass="select" placeholder="40">
+               <FormControl componentClass="select" defaultValue="40">
+                 <option value="10">10</option>
+                 <option value="20">20</option>
                  <option value="40">40</option>
-                 <option value="other">...</option>
+                 <option value="80">80</option>
+                 <option value="all">All</option>
                </FormControl>
              </FormGroup>
            </Navbar.Form>
@@ -77,7 +72,22 @@ class LQControls extends Component {
 }
 
 class LQTable extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirectTo: null,
+    }
+  }
+
+  handleRowClick(id, e) {
+    this.setState({ redirectTo: 'view/' + id });
+  }
+
   render() {
+    if (this.state.redirectTo !== null) {
+      return <Redirect to={this.state.redirectTo} push />
+    }
     return (
       <div className="LQTable">
         <Table striped bordered condensed hover>
@@ -90,18 +100,22 @@ class LQTable extends Component {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>What's 2 + 2?</td>
-              <td>4</td>
-              <td>3, 5</td>
-              <td>Edit Delete</td>
-            </tr>
-            <tr>
-              <td>What's 3 + 2?</td>
-              <td>5</td>
-              <td>3, 4, 6</td>
-              <td>Edit Delete</td>
-            </tr>
+            {
+              this.props.questions === null ?
+              <tr key={-1}>
+                <td colSpan={4}><em>Loading...</em></td>
+              </tr> :
+              this.props.questions.map(q =>
+                <tr key={q.id} onClick={this.handleRowClick.bind(this, q.id)}
+                  style={{ cursor: "pointer" }}>
+                  <td>{q.question}</td>
+                  <td>{q.answer}</td>
+                  <td>{q.distractors}</td>
+                  <td><Link to={"/edit/" + q.id}>Edit</Link>{" | "}
+                    <Link to={"/delete/" + q.id}>Delete</Link></td>
+                </tr>
+              )
+            }
           </tbody>
         </Table>
       </div>
@@ -114,8 +128,8 @@ class LQLinks extends Component {
     return (
       <div className="LQLinks">
         <ButtonToolbar>   {/* TODO: Remove if unnecessary */}
-          <ButtonGroup>
-            <Button disabled={true}>Page:</Button>
+          <ButtonGroup className='display-only'>
+            <Button>Page:</Button>
             <Button>1</Button>
             <Button>2</Button>
             <Button>3</Button>
