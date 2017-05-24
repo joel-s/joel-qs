@@ -20,7 +20,7 @@ class EditQuestion extends Component {
   }
 
   saveChanges(state) {
-    window.allQuestions.updateQuestion(this.qID, state);
+    return window.allQuestions.updateQuestion(this.qID, state);
   }
 
   render() {
