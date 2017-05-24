@@ -102,9 +102,9 @@ class AllQuestions {
       const status = response.statusCode();
       if (status >= 200 && status < 300) {
         q.id = id;
-        this._updateQuestionArrayEntry(q);
+        this._localUpdateQuestion(q);
       } else {
-        throw Error(`Unexpected POST response: ${status}`);
+        throw Error(`Unexpected PUT response: ${status}`);
       }
     });
     return promise;
@@ -114,11 +114,41 @@ class AllQuestions {
     return this.api.all("questions").put(id + "/", q);  // HACK: had to add "/"
   }
 
-  _updateQuestionArrayEntry(question) {
+  _localUpdateQuestion(question) {
     for (let i = 0; i < this.questions.length; i++) {
       if (this.questions[i].id === question.id) {
         this.questions[i] = question;
-        console.log(`${i} -> ${question}`);
+        return;
+      }
+    }
+  }
+
+  /**
+   * Delete a question remotely and locally.
+   * Return a promise for the response.
+   */
+  deleteQuestion(id) {
+    const promise = this._ajaxDeleteQuestion(id);
+    promise.then((response) => {
+      const status = response.statusCode();
+      if (status >= 200 && status < 300) {
+        this._localDeleteQuestion(id);
+      } else {
+        throw Error(`Unexpected DELETE response: ${status}`);
+      }
+    });
+    return promise;
+  }
+
+  _ajaxDeleteQuestion(id, q) {
+    return this.api.all("questions").delete(id + "/");  // HACK: had to add "/"
+  }
+
+  _localDeleteQuestion(id) {
+    for (let i = 0; i < this.questions.length; i++) {
+      if (this.questions[i].id === id) {
+        this.questions.splice(i, i);
+        return;
       }
     }
   }

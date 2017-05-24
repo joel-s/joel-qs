@@ -8,7 +8,7 @@
 - **/**: List of questions
 - **/create**: Create a question
 - **/edit/7**: Edit question 7
-- **/view/7**: View question 7
+- **/delete/7**: Delete question 7
 
 
 ## React Components
@@ -22,7 +22,7 @@
 - **CreateQuestion**: Create a new question
 - **EditQuestion**: Edit an existing question
 - **QuestionForm**: Form component used by CreateQuestion and EditQuestion
-- **ViewQuestion**: View an existing question
+- **DeleteQuestion**: Delete a question (prompt for yes/no)
 
 
 ## Local and Remote data

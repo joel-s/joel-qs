@@ -6,6 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import ListQuestions from './views/ListQuestions';
 import CreateQuestion from './views/CreateQuestion';
 import EditQuestion from './views/EditQuestion';
+import DeleteQuestion from './views/DeleteQuestion';
 import './App.css';
 
 class App extends Component {
@@ -42,6 +43,7 @@ class App extends Component {
             <Route path="/" exact={true} component={ListQuestions}/>
             <Route path="/create" component={CreateQuestion}/>
             <Route path="/edit/:_id" component={EditQuestion}/>
+            <Route path="/delete/:_id" component={DeleteQuestion}/>
           </div>
         </div>
       </Router>

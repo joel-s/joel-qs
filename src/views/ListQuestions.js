@@ -81,7 +81,7 @@ class LQTable extends Component {
   }
 
   handleRowClick(id, e) {
-    this.setState({ redirectTo: 'view/' + id });
+    this.setState({ redirectTo: 'edit/' + id });
   }
 
   render() {
@@ -111,8 +111,7 @@ class LQTable extends Component {
                   <td>{q.question}</td>
                   <td>{q.answer}</td>
                   <td>{q.distractors}</td>
-                  <td><Link to={"/edit/" + q.id}>Edit</Link>{" | "}
-                    <Link to={"/delete/" + q.id}>Delete</Link></td>
+                  <td><Link to={"/delete/" + q.id}>Delete</Link></td>
                 </tr>
               )
             }
