@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { FormGroup, FormControl, Button, ButtonToolbar, ButtonGroup }
   from 'react-bootstrap';
 import '../AllQuestions';   // for window.allQuestions
+import { sortQs } from '../ProcessQuestions';
 
 
 class ListQuestions extends Component {
@@ -31,6 +32,11 @@ class ListQuestions extends Component {
   }
 
   render() {
+    let processedQuestions = null;
+    if (this.state.questions !== null) {
+      // const sortedQs = sortQs(this.state.questions, sortColumn, ascending);
+      // processedQuestions = sortedQs;
+    }
     return (
       <div className="ListQuestions">
         <LQControls />
@@ -185,18 +191,15 @@ class SortToggle extends Component {
     const ascending = this.props.ascending;
 
     e.preventDefault();
-    if (selected && ascending) {
-      // Ascending => Unselected
+    if (selected && !ascending) {
+      // Descending => Unselected
       this.props.onChange({ sortColumn: 'id'});
-      // this.setState({ selected: false });
     } else if (selected) {
-      // Descending => Ascending
-      this.props.onChange({ sortColumn: this.props.field, ascending: true });
-      // this.setState({ ascending: true });
-    } else {
-      // Unselected => Descending
+      // Ascending => Descending
       this.props.onChange({ sortColumn: this.props.field, ascending: false });
-      // this.setState({ selected: true, ascending: false });
+    } else {
+      // Unselected => Ascending
+      this.props.onChange({ sortColumn: this.props.field, ascending: true });
     }
   }
 
@@ -205,7 +208,7 @@ class SortToggle extends Component {
     return (
       <a href="" onClick={this.bToggle}>
         {selected ?
-          (this.props.ascending ? this.UP_ARROW : this.DOWN_ARROW) :
+          (this.props.ascending ? this.DOWN_ARROW : this.UP_ARROW) :
           this.DOUBLE_ARROW}
       </a>
     )
