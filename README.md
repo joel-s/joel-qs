@@ -47,7 +47,7 @@ To prepare this app for deployment in a production environment, enhancements wou
 Possible ways to keep state:
 
 - Redux (seems like overkill)
-- A more informal global object (AllQuestions instantiated as window.allQuestions), which could also take care of communicating with the REST endpoint. It would need at least the following methods:
+- A more informal global object (AllQuestions instantiated as window.allQuestions), which could also take care of communicating with the REST endpoint. It would need at methods such as:
   - getQuestions()
   - addQuestion()
   - updateQuestion()
@@ -64,11 +64,7 @@ If AllQuestions.addQuestion() succeeds, the user should be redirected to the ind
 It would be nice to prevent the user from submitting multiple API calls by (for example) double-clicking a "Save" button. This doesn't need to be implemented in the MVP, though.
 
 
-## Filtering, Sorting, and Paginating Questions
-
-Filtering and sorting should be done first, then pagination.
-
-Filterer, Sorter, and Paginator classes?
+## Initial Design of ListQuestions Component
 
 State in ListQuestions:
 
@@ -77,4 +73,24 @@ State in ListQuestions:
 - sortColumn - Which column to sort by (default is the hidden ID column, `id`)
 - ascending - Sort order, `true` by default
 
-Need a component for toggling sorting state (None, Ascending, Descending). Let's call it SortToggle.
+ListQuestions can be divided up into three components (see ListQuestions.render() for details). Within the LQTable component we want a component for toggling sorting state (None, Ascending, Descending). Let's call it SortToggle.
+
+
+## Filtering, Sorting, and Paginating the Questions
+
+Filtering should be done first, then sorting, then pagination.
+
+How could ListQuestions conveniently work with filtered, sorted, paginated question data? (What would a good top-level interface look like?) We could have 3 functions as shown below. We can keep things simple by recalculating all the layers whenever something changes. (If necessary, it could be optimized later.)
+
+In ListQuestions.render():
+
+```JavaScript
+  let processedQuestions = null;
+  if (this.state.questions !== null) {
+    const filteredQs = filterQs(allQs, filterText);
+    const sortedQs = sortQs(filteredQs, sortColumn, ascending);
+    const pageQs = paginateQs(sortedQs, startIdx, qsPerPage);    
+  }
+```
+
+All these functions can be implemented in `ProcessQuestions.js`.
