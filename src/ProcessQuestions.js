@@ -39,3 +39,15 @@ export function sortQs(qs, field, ascending) {
 
   return sortedQs;
 }
+
+/**
+ * Return one page of `qs` (starting at `pageNum` which is always > 0).
+ * If 'perPage' is `null`, return `qs`.
+ */
+export function paginateQs(qs, perPage, pageNum) {
+  if (perPage === null) {
+    return qs;
+  }
+  var start = (pageNum - 1) * perPage;
+  return qs.slice(start, perPage);
+}

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Navbar, Table } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import { FormGroup, FormControl, Button, ButtonToolbar, ButtonGroup }
+import { FormGroup, FormControl, Button, ButtonGroup }
   from 'react-bootstrap';
 import '../AllQuestions';   // for window.allQuestions
-import { filterQs, sortQs } from '../ProcessQuestions';
+import { filterQs, sortQs, paginateQs } from '../ProcessQuestions';
 
 
 class ListQuestions extends Component {
@@ -24,6 +24,8 @@ class ListQuestions extends Component {
       searchText: null,
       sortColumn: 'id',
       ascending: true,
+      perPage: 40,
+      pageNum: 1,   // minimum value is 1 (for consistency with UI)
     };
 
     if (this.state.questions === null) {
@@ -40,33 +42,47 @@ class ListQuestions extends Component {
   }
 
   render() {
-    let processedQuestions = null;
+    let sortedQs = null;
+    let thisPageQs = null;
 
     if (this.state.questions !== null) {
       const filteredQs = filterQs(this.state.questions, this.state.searchText);
-      const sortedQs = sortQs(filteredQs, this.state.sortColumn,
+      sortedQs = sortQs(filteredQs, this.state.sortColumn,
         this.state.ascending);
-      processedQuestions = sortedQs;
+      thisPageQs = paginateQs(sortedQs, this.state.perPage,
+        this.state.pageNum);
     }
 
     return (
       <div className="ListQuestions">
-        <LQControls doFilter={this.filterBySearchText.bind(this)}/>
-        <LQTable questions={processedQuestions}
+        <LQControls doFilter={this.filterBySearchText.bind(this)}
+          updatePerPage={this.updatePerPage.bind(this)}/>
+        <LQTable questions={thisPageQs}
           sortColumn={this.state.sortColumn}
           ascending={this.state.ascending}
           updateSorting={this.updateSorting.bind(this)}/>
-        <LQLinks />
+        <LQButtons numQuestions={sortedQs === null ? 0 : sortedQs.length}
+          perPage={this.state.perPage}
+          pageNum={this.state.pageNum}
+          updatePageNum={this.updatePageNum.bind(this)}/>
       </div>
     );
   }
 
-  updateSorting(stateChanges) {
-    this.setState(stateChanges);   // not the world's greatest "loose coupling"
-  }
-
   filterBySearchText(string) {
     this.setState({ searchText: string });
+  }
+
+  updateSorting({ sortColumn, ascending }) {
+    this.setState({ sortColumn, ascending });
+  }
+
+  updatePerPage(num) {
+    this.setState({ perPage: num, pageNum: 1 });
+  }
+
+  updatePageNum(num) {
+    this.setState({ pageNum: num });
   }
 }
 
@@ -95,7 +111,8 @@ class LQControls extends Component {
              <FormGroup>
                Results per page:
                {' '}
-               <FormControl componentClass="select" defaultValue="40">
+               <FormControl componentClass="select" defaultValue="40"
+                 onChange={this.onPerPageSelect.bind(this)}>
                  <option value="10">10</option>
                  <option value="20">20</option>
                  <option value="40">40</option>
@@ -116,6 +133,16 @@ class LQControls extends Component {
   onFilterClick(event) {
     event.preventDefault();
     this.props.doFilter(this.state.filterText);
+  }
+
+  onPerPageSelect(event) {
+    let newValue;
+    if (event.target.value === "all") {
+      newValue = null;
+    } else {
+      newValue = +event.target.value;   // convert to number
+    }
+    this.props.updatePerPage(newValue);
   }
 }
 
@@ -188,22 +215,29 @@ class LQTable extends Component {
 /**
  * Links to other pages of questions (2, 3, 4, etc.).
  */
-class LQLinks extends Component {
+class LQButtons extends Component {
+
   render() {
+    if (this.props.numQuestions === 0) {
+      return <div className="LQButtons"></div>;
+    }
+
+    const numPages = Math.ceil(this.props.numQuestions / this.props.perPage);
+    const pages = [...Array(numPages).keys()].map(x => x+1);
+
     return (
-      <div className="LQLinks">
-        <ButtonToolbar>   {/* TODO: Remove if unnecessary */}
-          <ButtonGroup className='display-only'>
-            <Button>Page:</Button>
-            <Button>1</Button>
-            <Button>2</Button>
-            <Button>3</Button>
-            <Button>4</Button>
-            <Button>5</Button>
-            <Button>6</Button>
-            <Button>7</Button>
-          </ButtonGroup>
-        </ButtonToolbar>
+      <div className="LQButtons">
+        <ButtonGroup>
+          <Button className='display-only'>Page:</Button>
+          {/* TODO pages.map(p => <Button onClick={}) */}
+          <Button>1</Button>
+          <Button>2</Button>
+          <Button>3</Button>
+          <Button>4</Button>
+          <Button>5</Button>
+          <Button>6</Button>
+          <Button>7</Button>
+        </ButtonGroup>
       </div>
     );
   }
