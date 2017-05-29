@@ -5,20 +5,28 @@ import { Link } from 'react-router-dom';
 import { FormGroup, FormControl, Button, ButtonToolbar, ButtonGroup }
   from 'react-bootstrap';
 import '../AllQuestions';   // for window.allQuestions
-import { sortQs } from '../ProcessQuestions';
+import { filterQs, sortQs } from '../ProcessQuestions';
 
 
 class ListQuestions extends Component {
   constructor(props) {
     super(props);
 
+    let questions = null;
     let qs = window.allQuestions.getQuestions();
     if (typeof qs.length === "number") {
-      let questions = qs.map(({ id, question, answer, distractors }) =>
+      questions = qs.map(({ id, question, answer, distractors }) =>
         ({ id, question, answer, distractors }));
-      this.state = { questions, sortColumn: 'id', ascending: false };
-    } else {
-      this.state = { questions: null, sortColumn: 'id', ascending: false };
+    }
+
+    this.state = {
+      questions: questions,
+      searchText: null,
+      sortColumn: 'id',
+      ascending: true,
+    };
+
+    if (this.state.questions === null) {
       qs.then(response => {
         const qEntities = response.body();
         let questions = [];
@@ -33,14 +41,17 @@ class ListQuestions extends Component {
 
   render() {
     let processedQuestions = null;
+
     if (this.state.questions !== null) {
-      const sortedQs = sortQs(this.state.questions, this.state.sortColumn,
+      const filteredQs = filterQs(this.state.questions, this.state.searchText);
+      const sortedQs = sortQs(filteredQs, this.state.sortColumn,
         this.state.ascending);
       processedQuestions = sortedQs;
     }
+
     return (
       <div className="ListQuestions">
-        <LQControls />
+        <LQControls doFilter={this.filterBySearchText.bind(this)}/>
         <LQTable questions={processedQuestions}
           sortColumn={this.state.sortColumn}
           ascending={this.state.ascending}
@@ -53,19 +64,32 @@ class ListQuestions extends Component {
   updateSorting(stateChanges) {
     this.setState(stateChanges);   // not the world's greatest "loose coupling"
   }
+
+  filterBySearchText(string) {
+    this.setState({ searchText: string });
+  }
 }
 
 class LQControls extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { filterText: null };
+  }
+
   render() {
     return (
       <div className="LQControls">
         <Navbar>
            <Navbar.Form pullLeft>
              <FormGroup>
-               <FormControl type="text" placeholder="Text" />
+               <FormControl type="text" placeholder="Text"
+                 onChange={this.onTextChange.bind(this)}/>
              </FormGroup>
              {' '}
-             <Button type="submit">Search</Button>
+             <Button type="submit" onClick={this.onFilterClick.bind(this)}>
+               Search
+             </Button>
            </Navbar.Form>
            <Navbar.Form>
              <FormGroup>
@@ -83,6 +107,15 @@ class LQControls extends Component {
          </Navbar>
        </div>
     );
+  }
+
+  onTextChange(event) {
+    this.setState({ filterText: event.target.value });
+  }
+
+  onFilterClick(event) {
+    event.preventDefault();
+    this.props.doFilter(this.state.filterText);
   }
 }
 
@@ -194,7 +227,7 @@ class SortToggle extends Component {
     e.preventDefault();
     if (selected && !ascending) {
       // Descending => Unselected
-      this.props.onChange({ sortColumn: 'id'});
+      this.props.onChange({ sortColumn: 'id', ascending: true });
     } else if (selected) {
       // Ascending => Descending
       this.props.onChange({ sortColumn: this.props.field, ascending: false });
