@@ -34,13 +34,14 @@ class ListQuestions extends Component {
   render() {
     let processedQuestions = null;
     if (this.state.questions !== null) {
-      // const sortedQs = sortQs(this.state.questions, sortColumn, ascending);
-      // processedQuestions = sortedQs;
+      const sortedQs = sortQs(this.state.questions, this.state.sortColumn,
+        this.state.ascending);
+      processedQuestions = sortedQs;
     }
     return (
       <div className="ListQuestions">
         <LQControls />
-        <LQTable questions={this.state.questions}
+        <LQTable questions={processedQuestions}
           sortColumn={this.state.sortColumn}
           ascending={this.state.ascending}
           updateSorting={this.updateSorting.bind(this)}/>
