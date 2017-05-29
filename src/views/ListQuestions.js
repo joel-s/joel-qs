@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Navbar, Table } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import { FormGroup, FormControl, Button, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { FormGroup, FormControl, Button, ButtonToolbar, ButtonGroup }
+  from 'react-bootstrap';
 import '../AllQuestions';   // for window.allQuestions
 
 
@@ -14,9 +15,9 @@ class ListQuestions extends Component {
     if (typeof qs.length === "number") {
       let questions = qs.map(({ id, question, answer, distractors }) =>
         ({ id, question, answer, distractors }));
-      this.state = { questions };
+      this.state = { questions, sortColumn: 'id', ascending: false };
     } else {
-      this.state = { questions: null };
+      this.state = { questions: null, sortColumn: 'id', ascending: false };
       qs.then(response => {
         const qEntities = response.body();
         let questions = [];
@@ -33,10 +34,17 @@ class ListQuestions extends Component {
     return (
       <div className="ListQuestions">
         <LQControls />
-        <LQTable questions={this.state.questions}/>
+        <LQTable questions={this.state.questions}
+          sortColumn={this.state.sortColumn}
+          ascending={this.state.ascending}
+          updateSorting={this.updateSorting.bind(this)}/>
         <LQLinks />
       </div>
     );
+  }
+
+  updateSorting(stateChanges) {
+    this.setState(stateChanges);   // not the world's greatest "loose coupling"
   }
 }
 
@@ -93,9 +101,24 @@ class LQTable extends Component {
         <Table striped bordered condensed hover>
           <thead>
             <tr>
-              <th>Question</th>
-              <th>Answer</th>
-              <th>Distractors</th>
+              <th>Question
+                <SortToggle field="question"
+                  sortColumn={this.props.sortColumn}
+                  ascending={this.props.ascending}
+                  onChange={this.props.updateSorting}/>
+              </th>
+              <th>Answer
+                <SortToggle field="answer"
+                  sortColumn={this.props.sortColumn}
+                  ascending={this.props.ascending}
+                  onChange={this.props.updateSorting}/>
+              </th>
+              <th>Distractors
+                <SortToggle field="distractors"
+                  sortColumn={this.props.sortColumn}
+                  ascending={this.props.ascending}
+                  onChange={this.props.updateSorting}/>
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -122,6 +145,9 @@ class LQTable extends Component {
   }
 }
 
+/**
+ * Links to other pages of questions (2, 3, 4, etc.).
+ */
 class LQLinks extends Component {
   render() {
     return (
@@ -140,6 +166,49 @@ class LQLinks extends Component {
         </ButtonToolbar>
       </div>
     );
+  }
+}
+
+class SortToggle extends Component {
+  UP_ARROW = '\u{2b06}';
+  DOWN_ARROW = '\u{2b07}';
+  DOUBLE_ARROW = '\u{2b0d}';
+
+  constructor(props) {
+    super(props);
+
+    this.bToggle = this.toggle.bind(this);
+  }
+
+  toggle(e) {
+    const selected = this.props.sortColumn === this.props.field;
+    const ascending = this.props.ascending;
+
+    e.preventDefault();
+    if (selected && ascending) {
+      // Ascending => Unselected
+      this.props.onChange({ sortColumn: 'id'});
+      // this.setState({ selected: false });
+    } else if (selected) {
+      // Descending => Ascending
+      this.props.onChange({ sortColumn: this.props.field, ascending: true });
+      // this.setState({ ascending: true });
+    } else {
+      // Unselected => Descending
+      this.props.onChange({ sortColumn: this.props.field, ascending: false });
+      // this.setState({ selected: true, ascending: false });
+    }
+  }
+
+  render() {
+    const selected = this.props.sortColumn === this.props.field;
+    return (
+      <a href="" onClick={this.bToggle}>
+        {selected ?
+          (this.props.ascending ? this.UP_ARROW : this.DOWN_ARROW) :
+          this.DOUBLE_ARROW}
+      </a>
+    )
   }
 }
 
