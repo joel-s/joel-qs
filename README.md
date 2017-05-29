@@ -1,6 +1,19 @@
 # React-based "Questions" UI
 
-*Provides a front end to "joel-qs-api" (REST API).*
+*Provides a front end (browser-based UI) to "joel-qs-api" (REST API).*
+
+
+## Architecture
+
+The server uses Python and Django, with django-rest-framework for the REST API. The client uses React, React Router, and (React) Bootstrap. The code in ES6/JSX. The build process Babel and Webpack to transpile the source code into a single "bundle.js" suitable for running on older browsers such as IE. To start the development with npm, type `npm start`. When working with the development server, just save changes to any of the JavaScript files and the server will restart the application with the changes.
+
+In terms of architecture, I considered three main options:
+
+1. Keep JavaScript to a minimum and have Python/Django do all the data processing and page rendering.
+2. Implement the UI mainly in JavaScript but avoid caching data in the browser. With this approach almost every click would result in the JavaScript UI communicating with the server, and the server would do all the filtering, sorting, and pagination.
+3. Implement the UI in JavaScript and cache data in the browser. With this approach, the JavaScript downloads all the question data and can filter, sort, and paginate it without having to communicate with the server.
+
+I went with option 3, which minimizes the frequency of requests to the server and provides the fastest UI response times. There are various trade-offs between options 2 and 3, and in my opinion both are good options; which of the two is best would depend on factors such as how many questions there are, how often the question data changes, and how important it is for users editing the questions to quickly see each other's changes.
 
 
 ## Router URLs:
@@ -22,7 +35,7 @@
 - **CreateQuestion**: Create a new question
 - **EditQuestion**: Edit an existing question
 - **QuestionForm**: Form component used by CreateQuestion and EditQuestion
-- **DeleteQuestion**: Delete a question (prompt for yes/no)
+- **DeleteQuestion**: Delete a question (prompt for Delete/Cancel)
 
 
 ## Local and Remote data
@@ -63,3 +76,5 @@ State in ListQuestions:
 - searchText - Text entered in the search field
 - sortColumn - Which column to sort by (default is the hidden ID column, `id`)
 - ascending - Sort order, `true` by default
+
+Need a component for toggling sorting state (None, Ascending, Descending). Let's call it SortToggle.
