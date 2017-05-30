@@ -7,6 +7,7 @@ import ListQuestions from './views/ListQuestions';
 import CreateQuestion from './views/CreateQuestion';
 import EditQuestion from './views/EditQuestion';
 import DeleteQuestion from './views/DeleteQuestion';
+import UploadQuestions from './views/UploadQuestions';
 import './App.css';
 
 class App extends Component {
@@ -26,8 +27,10 @@ class App extends Component {
                 <LinkContainer to="/create">
                   <NavItem eventKey={1}>Create a question</NavItem>
                 </LinkContainer>
+                <LinkContainer to="/upload">
+                  <NavItem eventKey={2}>Upload questions</NavItem>
+                </LinkContainer>
                 {/*
-                <NavItem eventKey={2} href="#">Link</NavItem>
                 <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                   <MenuItem eventKey={3.1}>Action</MenuItem>
                   <MenuItem eventKey={3.2}>Another action</MenuItem>
@@ -44,6 +47,7 @@ class App extends Component {
             <Route path="/create" component={CreateQuestion}/>
             <Route path="/edit/:_id" component={EditQuestion}/>
             <Route path="/delete/:_id" component={DeleteQuestion}/>
+            <Route path="/upload" component={UploadQuestions}/>
           </div>
         </div>
       </Router>
