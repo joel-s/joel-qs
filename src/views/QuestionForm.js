@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
+/**
+ * Form component used by CreateQuestion and EditQuestion.
+ * Prevents duplication of code.
+ */
 class QuestionForm extends Component {
   constructor(props) {
     super(props);

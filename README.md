@@ -22,6 +22,7 @@ I went with option 3, which minimizes the frequency of requests to the server an
 - **/create**: Create a question
 - **/edit/7**: Edit question 7
 - **/delete/7**: Delete question 7
+- **/upload**: Upload a CSV file (optionally overwrite existing questions)
 
 
 ## React Components
@@ -31,11 +32,12 @@ I went with option 3, which minimizes the frequency of requests to the server an
 - **ListQuestions**: Index with a list of questions (filterable, sortable, paginated)
   - **LQControls**: Control form for ListQuestions
   - **LQTable**: Table of questions
-  - **LQLinks**: Links to pages of questions
+  - **LQButtons**: Links to pages of questions
 - **CreateQuestion**: Create a new question
 - **EditQuestion**: Edit an existing question
 - **QuestionForm**: Form component used by CreateQuestion and EditQuestion
 - **DeleteQuestion**: Delete a question (prompt for Delete/Cancel)
+- **UploadQuestions**: Upload a CSV file (optionally overwrite existing questions)
 
 
 ## Local and Remote data
@@ -85,12 +87,18 @@ How could ListQuestions conveniently work with filtered, sorted, paginated quest
 In ListQuestions.render():
 
 ```JavaScript
+  // Slightly simplified
   let processedQuestions = null;
   if (this.state.questions !== null) {
     const filteredQs = filterQs(allQs, filterText);
     const sortedQs = sortQs(filteredQs, sortColumn, ascending);
-    const pageQs = paginateQs(sortedQs, startIdx, qsPerPage);    
+    processedQs = paginateQs(sortedQs, pageNum, perPage);    
   }
 ```
 
 All these functions can be implemented in `ProcessQuestions.js`.
+
+
+## Upload
+
+This should submit a POST request to `api-hostname:/questions-upload/`.

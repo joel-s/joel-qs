@@ -7,7 +7,11 @@ import { FormGroup, FormControl, Button, ButtonGroup }
 import '../AllQuestions';   // for window.allQuestions
 import { filterQs, sortQs, paginateQs } from '../ProcessQuestions';
 
-
+/**
+ * Index with a list of questions (filterable, sortable, paginated).
+ * Shares state with sub-components via properties and callbacks, as
+ * recommended in: https://facebook.github.io/react/docs/thinking-in-react.html
+ */
 class ListQuestions extends Component {
   constructor(props) {
     super(props);
@@ -86,6 +90,9 @@ class ListQuestions extends Component {
   }
 }
 
+/**
+ * Control form for ListQuestions.
+ */
 class LQControls extends Component {
   constructor(props) {
     super(props);
@@ -146,6 +153,9 @@ class LQControls extends Component {
   }
 }
 
+/**
+ * Table of questions.
+ */
 class LQTable extends Component {
   constructor(props) {
     super(props);

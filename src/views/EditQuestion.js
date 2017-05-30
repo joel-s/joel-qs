@@ -3,7 +3,9 @@ import { Redirect } from 'react-router';
 import QuestionForm from './QuestionForm';
 import '../AllQuestions';   // for window.allQuestions
 
-
+/**
+ * Edit an existing question.
+ */
 class EditQuestion extends Component {
   constructor(props) {
     super(props);
@@ -17,10 +19,6 @@ class EditQuestion extends Component {
     }
 
     this.bSaveChanges = this.saveChanges.bind(this);
-  }
-
-  saveChanges(state) {
-    return window.allQuestions.updateQuestion(this.qID, state);
   }
 
   render() {
@@ -39,6 +37,10 @@ class EditQuestion extends Component {
         </div>
       </div>
     );
+  }
+
+  saveChanges(state) {
+    return window.allQuestions.updateQuestion(this.qID, state);
   }
 }
 

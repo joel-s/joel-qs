@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import '../AllQuestions';   // for window.allQuestions
 
-
+/**
+ * Delete a question (prompt for Delete/Cancel).
+ */
 class DeleteQuestion extends Component {
   constructor(props) {
     super(props);
