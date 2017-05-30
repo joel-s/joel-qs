@@ -1,10 +1,12 @@
-import restful, { fetchBackend } from 'restful.js';
-
+import axios from 'axios';
 
 class AllQuestions {
 
   constructor() {
-    this.api = restful("http://localhost:8000", fetchBackend(fetch));
+    this.api = axios.create({
+      baseURL: 'http://localhost:8000/',
+      timeout: 5000,
+    });
     this.questions = null;
     // this._createFakeQuestions(5);
   }
@@ -23,7 +25,7 @@ class AllQuestions {
   }
 
   /**
-   * Get a promise (for a response) from the API or return the cached array.
+   * Return a promise (for a response) from the API or a cached array.
    * If the response has a numeric 'length' argument, it's an array.
    */
   getQuestions() {
@@ -32,12 +34,12 @@ class AllQuestions {
     }
     const promise = this._ajaxGetQuestions();
     promise.then((response) => {
-      const status = response.statusCode();
+      const status = response.status;
       if (status >= 200 && status < 300) {
-        const qEntities = response.body();
+        const qEntities = response.data;
         this.questions = [];
         for (let qEntity of qEntities) {
-          const { id, question, answer, distractors } = qEntity.data();
+          const { id, question, answer, distractors } = qEntity;
           this.questions.push({ id, question, answer, distractors });
         }
       } else {
@@ -48,7 +50,8 @@ class AllQuestions {
   }
 
   _ajaxGetQuestions() {
-    return this.api.all("questions").getAll();
+    // return this.api.all("questions").getAll();
+    return this.api.get("questions");
   }
 
   /**
@@ -75,9 +78,10 @@ class AllQuestions {
     this._assertValidQuestion(q, false);
     const promise = this._ajaxAddQuestion(q);
     promise.then((response) => {
-      const status = response.statusCode();
+      console.log(response);
+      const status = response.status;
       if (status >= 200 && status < 300) {
-        const newID = response.body().id();
+        const newID = response.data.id;
         q.id = newID;
         this.questions.push(q);
       } else {
@@ -88,7 +92,7 @@ class AllQuestions {
   }
 
   _ajaxAddQuestion(q) {
-    return this.api.all("questions/").post(q);  // HACK: had to add "/"
+    return this.api.post("questions/", q);
   }
 
   /**
@@ -99,7 +103,7 @@ class AllQuestions {
     this._assertValidQuestion(q, false);
     const promise = this._ajaxUpdateQuestion(id, q);
     promise.then((response) => {
-      const status = response.statusCode();
+      const status = response.status;
       if (status >= 200 && status < 300) {
         q.id = id;
         this._localUpdateQuestion(q);
@@ -111,7 +115,7 @@ class AllQuestions {
   }
 
   _ajaxUpdateQuestion(id, q) {
-    return this.api.all("questions").put(id + "/", q);  // HACK: had to add "/"
+    return this.api.put("questions/" + id + "/", q);
   }
 
   _localUpdateQuestion(question) {
@@ -130,7 +134,7 @@ class AllQuestions {
   deleteQuestion(id) {
     const promise = this._ajaxDeleteQuestion(id);
     promise.then((response) => {
-      const status = response.statusCode();
+      const status = response.status;
       if (status >= 200 && status < 300) {
         this._localDeleteQuestion(id);
       } else {
@@ -141,7 +145,7 @@ class AllQuestions {
   }
 
   _ajaxDeleteQuestion(id, q) {
-    return this.api.all("questions").delete(id + "/");  // HACK: had to add "/"
+    return this.api.delete("questions/" + id + "/");
   }
 
   _localDeleteQuestion(id) {
@@ -151,6 +155,38 @@ class AllQuestions {
         return;
       }
     }
+  }
+
+  /**
+   * Upload a CSV file containing questions.
+   * Return a promise for the response.
+   */
+  uploadQuestions(id) {
+    const promise = this._ajaxUploadQuestions(id);
+    promise.then((response) => {
+      const status = response.status;
+      if (status >= 200 && status < 300) {
+        this._localUploadQuestions();
+      } else {
+        throw Error(`Unexpected POST response: ${status}`);
+      }
+    });
+    return promise;
+  }
+
+  _ajaxUploadQuestions(id, q) {
+    let formData = new FormData();
+    let file = document.querySelector('#fileInput');
+    formData.append("csvFile", file.files[0]);
+    return this.api.post("questions-csv/", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    });
+  }
+
+  _localUploadQuestions() {
+    // TODO: Anything needed here?
   }
 
   _assertValidQuestion(q, expectID) {

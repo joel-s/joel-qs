@@ -34,10 +34,10 @@ class ListQuestions extends Component {
 
     if (this.state.questions === null) {
       qs.then(response => {
-        const qEntities = response.body();
+        const qEntities = response.data;
         let questions = [];
         for (let qEntity of qEntities) {
-          const { id, question, answer, distractors } = qEntity.data();
+          const { id, question, answer, distractors } = qEntity;
           questions.push({ id, question, answer, distractors });
         }
         this.setState({ questions });

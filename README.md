@@ -101,4 +101,4 @@ All these functions can be implemented in `ProcessQuestions.js`.
 
 ## Upload
 
-This should submit a POST request to `api-hostname:/questions-upload/`.
+This should submit a POST request to `api-hostname:/questions-csv/`.
