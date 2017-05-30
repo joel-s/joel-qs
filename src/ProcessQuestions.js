@@ -48,6 +48,7 @@ export function paginateQs(qs, perPage, pageNum) {
   if (perPage === null) {
     return qs;
   }
-  var start = (pageNum - 1) * perPage;
-  return qs.slice(start, perPage);
+
+  const start = (pageNum - 1) * perPage;
+  return qs.slice(start, start + perPage);
 }

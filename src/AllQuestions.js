@@ -147,7 +147,7 @@ class AllQuestions {
   _localDeleteQuestion(id) {
     for (let i = 0; i < this.questions.length; i++) {
       if (this.questions[i].id === id) {
-        this.questions.splice(i, i);
+        this.questions.splice(i, 1);
         return;
       }
     }

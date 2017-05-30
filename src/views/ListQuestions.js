@@ -64,7 +64,7 @@ class ListQuestions extends Component {
         <LQButtons numQuestions={sortedQs === null ? 0 : sortedQs.length}
           perPage={this.state.perPage}
           pageNum={this.state.pageNum}
-          updatePageNum={this.updatePageNum.bind(this)}/>
+          gotoPage={this.gotoPage.bind(this)}/>
       </div>
     );
   }
@@ -81,7 +81,7 @@ class ListQuestions extends Component {
     this.setState({ perPage: num, pageNum: 1 });
   }
 
-  updatePageNum(num) {
+  gotoPage(num) {
     this.setState({ pageNum: num });
   }
 }
@@ -218,7 +218,8 @@ class LQTable extends Component {
 class LQButtons extends Component {
 
   render() {
-    if (this.props.numQuestions === 0) {
+    if (this.props.perPage === null ||
+        this.props.numQuestions < this.props.perPage ) {
       return <div className="LQButtons"></div>;
     }
 
@@ -228,21 +229,28 @@ class LQButtons extends Component {
     return (
       <div className="LQButtons">
         <ButtonGroup>
-          <Button className='display-only'>Page:</Button>
-          {/* TODO pages.map(p => <Button onClick={}) */}
-          <Button>1</Button>
-          <Button>2</Button>
-          <Button>3</Button>
-          <Button>4</Button>
-          <Button>5</Button>
-          <Button>6</Button>
-          <Button>7</Button>
+          <Button className='display-only'><strong>Page:</strong></Button>
+          {
+            pages.map(p =>
+              <Button key={p} onClick={this.gotoPage.bind(this, p)}
+                active={p === this.props.pageNum}>
+                {p}
+              </Button>
+            )
+          }
         </ButtonGroup>
       </div>
     );
   }
+
+  gotoPage(pageNum) {
+    this.props.gotoPage(pageNum);
+  }
 }
 
+/**
+ * Input component that controls what field and order is used for sorting.
+ */
 class SortToggle extends Component {
   UP_ARROW = '\u{2b06}';
   DOWN_ARROW = '\u{2b07}';
