@@ -51,7 +51,7 @@ class AllQuestions {
 
   _ajaxGetQuestions() {
     // return this.api.all("questions").getAll();
-    return this.api.get("questions");
+    return this.api.get("questions/");
   }
 
   /**
@@ -161,8 +161,8 @@ class AllQuestions {
    * Upload a CSV file containing questions.
    * Return a promise for the response.
    */
-  uploadQuestions(id) {
-    const promise = this._ajaxUploadQuestions(id);
+  uploadQuestions(overwrite) {
+    const promise = this._ajaxUploadQuestions(overwrite);
     promise.then((response) => {
       const status = response.status;
       if (status >= 200 && status < 300) {
@@ -174,10 +174,16 @@ class AllQuestions {
     return promise;
   }
 
-  _ajaxUploadQuestions(id, q) {
+  _ajaxUploadQuestions(overwrite) {
     let formData = new FormData();
-    let file = document.querySelector('#fileInput');
-    formData.append("csvFile", file.files[0]);
+
+    // Tight coupling to UI. There might be a more "React" way to do this.
+    let fileSelector = document.querySelector('#fileInput');
+    formData.append("csvFile", fileSelector.files[0]);
+
+    console.assert(overwrite === "append" || overwrite === "overwrite");
+    formData.append("overwrite", overwrite);
+
     return this.api.post("questions-csv/", formData, {
         headers: {
           'Content-Type': 'multipart/form-data'

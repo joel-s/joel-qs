@@ -13,7 +13,7 @@ class UploadQuestions extends Component {
 
     this.state = {
       fileName: null,
-      overwrite: false,
+      overwrite: "append",
       done: false,
     }
   }
@@ -45,7 +45,7 @@ class UploadQuestions extends Component {
 
               <FormGroup className="text-center">
                 <ControlLabel>CSV File</ControlLabel>
-                <FormControl id="fileInput" type="file"
+                <FormControl id="fileInput" type="file" name="csvFile"
                   onChange={this.handleFileChange.bind(this)}/>
                 <HelpBlock>
                   Each line describes a multiple-choice question.<br />
@@ -74,9 +74,10 @@ class UploadQuestions extends Component {
 
   handleOverwriteChange(event) {
     const target = event.target;
-    this.setState({ overwrite: target.value === "overwrite" });
+    this.setState({ overwrite: target.value });
   }
 
+  // Important for enabling Save button when a file is selected
   handleFileChange(event) {
     const target = event.target;
     this.setState({ fileName: target.value });
@@ -84,10 +85,7 @@ class UploadQuestions extends Component {
 
   doUpload(event) {
     event.preventDefault();
-    let promise = window.allQuestions.uploadQuestions(
-      this.state.fileName,
-      this.state.overwrite
-    );
+    let promise = window.allQuestions.uploadQuestions(this.state.overwrite);
     promise.then((response) => this.setState({ done: true }))
       .catch((error) => alert(error));
   }
