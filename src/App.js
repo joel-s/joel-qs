@@ -8,6 +8,7 @@ import CreateQuestion from './views/CreateQuestion';
 import EditQuestion from './views/EditQuestion';
 import DeleteQuestion from './views/DeleteQuestion';
 import UploadQuestions from './views/UploadQuestions';
+import ReloadSite from './views/ReloadSite';
 import './App.css';
 
 class App extends Component {
@@ -48,6 +49,7 @@ class App extends Component {
             <Route path="/edit/:_id" component={EditQuestion}/>
             <Route path="/delete/:_id" component={DeleteQuestion}/>
             <Route path="/upload" component={UploadQuestions}/>
+            <Route path="/reload" component={ReloadSite}/>
           </div>
         </div>
       </Router>

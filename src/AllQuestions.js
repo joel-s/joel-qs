@@ -5,7 +5,7 @@ class AllQuestions {
   constructor() {
     this.api = axios.create({
       baseURL: 'http://localhost:8000/',
-      timeout: 5000,
+      timeout: 10000,
     });
     this.questions = null;
     // this._createFakeQuestions(5);

@@ -14,13 +14,13 @@ class UploadQuestions extends Component {
     this.state = {
       fileName: null,
       overwrite: "append",
-      done: false,
+      redirectTo: null,
     }
   }
 
   render() {
-    if (this.state.done) {
-      return <Redirect to="/" push />
+    if (this.state.redirectTo !== null) {
+      return <Redirect to={this.state.redirectTo} push />
     }
     return (
       <div className="UploadQuestions jumbotron">
@@ -38,7 +38,8 @@ class UploadQuestions extends Component {
                 </Radio>
                 {' '}
                 <Radio name="overwrite" value="overwrite" inline
-                  style={{ color: 'red' }}>
+                  style={{ color: 'red' }}
+                  onChange={this.handleOverwriteChange.bind(this)}>
                   Replace existing data
                 </Radio>
               </FormGroup>
@@ -86,13 +87,19 @@ class UploadQuestions extends Component {
   doUpload(event) {
     event.preventDefault();
     let promise = window.allQuestions.uploadQuestions(this.state.overwrite);
-    promise.then((response) => this.setState({ done: true }))
-      .catch((error) => alert(error));
+    promise.then(
+      response => {
+        window._needToReload_ = true;
+        this.setState({ redirectTo: "/reload" });
+      }
+    ).catch(
+      error => alert(error)
+    );
   }
 
   cancelUpload(event) {
     event.preventDefault();
-    this.setState({ done: true });
+    this.setState({ redirectTo: "/" });
   }
 }
 

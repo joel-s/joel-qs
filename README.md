@@ -23,6 +23,7 @@ I went with option 3, which minimizes the frequency of requests to the server an
 - **/edit/7**: Edit question 7
 - **/delete/7**: Delete question 7
 - **/upload**: Upload a CSV file (optionally overwrite existing questions)
+- **/reload**: Reload the site
 
 
 ## React Components
@@ -38,7 +39,7 @@ I went with option 3, which minimizes the frequency of requests to the server an
 - **QuestionForm**: Form component used by CreateQuestion and EditQuestion
 - **DeleteQuestion**: Delete a question (prompt for Delete/Cancel)
 - **UploadQuestions**: Upload a CSV file (optionally overwrite existing questions)
-
+- **ReloadSite**: Reload this site, redirecting to "/" (e.g., after upload)
 
 ## Local and Remote data
 
