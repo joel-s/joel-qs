@@ -41,6 +41,7 @@ I went with option 3, which minimizes the frequency of requests to the server an
 - **UploadQuestions**: Upload a CSV file (optionally overwrite existing questions)
 - **ReloadSite**: Reload this site, redirecting to "/" (e.g., after upload)
 
+
 ## Local and Remote data
 
 To keep things simple, the React app _assumes_ that it is the only client communicating with the back end. If other clients use the back end simultaneously, the app will be blissfully unaware of the changes made by those clients.
@@ -100,6 +101,11 @@ In ListQuestions.render():
 All these functions can be implemented in `ProcessQuestions.js`.
 
 
-## Upload
+## To do
 
-This should submit a POST request to `api-hostname:/questions-csv/`.
+A few things are left to do. This may not be a comprehensive list.
+
+- Implement automated tests
+- Improve error reporting when file for upload contains an invalid line
+- Improve appearance of bottom button bar when there are many pages
+- Look into re-enabling CSRF protection (possibly a thorny issue)

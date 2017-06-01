@@ -1,10 +1,11 @@
 import axios from 'axios';
+import settings from './settings';
 
 class AllQuestions {
 
   constructor() {
     this.api = axios.create({
-      baseURL: 'http://localhost:8000/',
+      baseURL: settings.apiBaseUrl,
       timeout: 10000,
     });
     this.questions = null;
@@ -78,7 +79,6 @@ class AllQuestions {
     this._assertValidQuestion(q, false);
     const promise = this._ajaxAddQuestion(q);
     promise.then((response) => {
-      console.log(response);
       const status = response.status;
       if (status >= 200 && status < 300) {
         const newID = response.data.id;
@@ -192,7 +192,7 @@ class AllQuestions {
   }
 
   _localUploadQuestions() {
-    // TODO: Anything needed here?
+    // For now this is blank, since uploadQuestions triggers reload + redirect
   }
 
   _assertValidQuestion(q, expectID) {
