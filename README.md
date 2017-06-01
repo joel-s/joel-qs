@@ -108,4 +108,5 @@ A few things are left to do. This may not be a comprehensive list.
 - Implement automated tests
 - Improve error reporting when file for upload contains an invalid line
 - Improve appearance of bottom button bar when there are many pages
-- Look into re-enabling CSRF protection (possibly a thorny issue)
+- May try changing "Search" button to a "Filter" check box? 
+- Look into security improvements (possibly a thorny issue)
