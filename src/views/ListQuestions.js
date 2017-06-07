@@ -41,7 +41,7 @@ class ListQuestions extends Component {
           questions.push({ id, question, answer, distractors });
         }
         this.setState({ questions });
-      });
+      }).catch((error) => alert(`${error}\n(Try reloading.)`));
     }
   }
 
