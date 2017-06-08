@@ -5,7 +5,7 @@
 
 ## Architecture
 
-The server uses Python and Django, with django-rest-framework for the REST API. The client uses React, React Router, and (React) Bootstrap. The code in ES6/JSX. The build process Babel and Webpack to transpile the source code into a single "bundle.js" suitable for running on older browsers such as IE. To start the development with npm, type `npm start`. When working with the development server, just save changes to any of the JavaScript files and the server will restart the application with the changes.
+The server uses Python and Django, with django-rest-framework for the REST API. The client uses React, React Router, and (React) Bootstrap. The code in ES6/JSX. The build process uses Babel and Webpack to transpile the source code into a single "bundle.js" suitable for running on older browsers such as IE. (The build process was set up by create-react-app, which was used to bootstrap this web application.) To start the development server with `npm`, type `npm start`. When working with the development server, just save changes to any of the JavaScript files and the server will restart the application with the changes.
 
 In terms of architecture, I considered three main options:
 
@@ -103,10 +103,12 @@ All these functions can be implemented in `ProcessQuestions.js`.
 
 ## To do
 
-A few things are left to do. This may not be a comprehensive list.
+Some things are left to do. This is not a comprehensive list.
 
 - Implement automated tests
 - Improve error reporting when file for upload contains an invalid line
 - Improve appearance of bottom button bar when there are many pages
-- May try changing "Search" button to a "Filter" check box? 
+- Support multiple lists
+- Support multiple users, each with username/password and multiple lists
+- May try changing "Search" button to a "Filter" check box?
 - Look into security improvements (possibly a thorny issue)
