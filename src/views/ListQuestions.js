@@ -200,24 +200,38 @@ class LQTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {
-              this.props.questions === null ?
-              <tr key={-1}>
-                <td colSpan={4}><em>Loading...</em></td>
-              </tr> :
-              this.props.questions.map(q =>
-                <tr key={q.id} onClick={this.handleRowClick.bind(this, q.id)}
-                  style={{ cursor: "pointer" }}>
-                  <td>{q.question}</td>
-                  <td>{q.answer}</td>
-                  <td>{q.distractors}</td>
-                  <td><Link to={"/delete/" + q.id}>Delete</Link></td>
-                </tr>
-              )
-            }
+            {this.questionTableContents()}
           </tbody>
         </Table>
       </div>
+    );
+  }
+
+  questionTableContents() {
+    if (this.props.questions === null) {
+      return (
+        <tr key={-1}>
+          <td colSpan={4}><em>Loading...</em></td>
+        </tr>
+      );
+    }
+
+    if (this.props.questions.length === 0) {
+      return (
+        <tr key={-1}>
+          <td colSpan={4}><em>No questions</em></td>
+        </tr>
+      );
+    }
+
+    return this.props.questions.map(q =>
+      <tr key={q.id} onClick={this.handleRowClick.bind(this, q.id)}
+        style={{ cursor: "pointer" }}>
+        <td>{q.question}</td>
+        <td>{q.answer}</td>
+        <td>{q.distractors}</td>
+        <td><Link to={"/delete/" + q.id}>Delete</Link></td>
+      </tr>
     );
   }
 }
