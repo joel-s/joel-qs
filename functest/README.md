@@ -14,6 +14,13 @@
 Later, when the Questions app has a "download" feature, restoring the original list of questions can be implemented.
 
 
+## Running the tests
+
+**TODO:** What to install and how? (pytest, etc.)
+
+Edit `setup.py` appropriately and run `pytest` in the `functest` directory.
+
+
 ## Configuration
 
 - **setup.py** - Configuration -- most important, the base URL for Selenium
