@@ -18,7 +18,7 @@ Later, when the Questions app has a "download" feature, restoring the original l
 
 **TODO:** What to install and how? (pytest, etc.)
 
-Edit `setup.py` appropriately and run `pytest` in the `functest` directory.
+Edit `functest/setup.py` appropriately and run `pytest` in the `functest` directory.
 
 
 ## Configuration
@@ -30,7 +30,9 @@ Edit `setup.py` appropriately and run `pytest` in the `functest` directory.
 
 - **crud/** - Tests for basic CRUD (Create, Read, Update, Delete) functionality
 - **crud/smoke_test.py** - Test a quick create-view-delete
-- **crud/creation_test.py** - Tesh
+- **crud/creation_test.py** - Tests Creation
+- **upload_test.py** - Tests upload of valid files
+- **upload_bad_data_test.py** - Tests upload of corrupt/invalid files
 
 
 ## Utilities and data files
